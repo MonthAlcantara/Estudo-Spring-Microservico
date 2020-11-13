@@ -26,7 +26,7 @@ public class Payment implements Serializable {
     }
 
     public Payment(@NotBlank String name, @NotNull BigDecimal dailyIncome, @PositiveOrZero @Max(31) Integer days) {
-        Assert.isTrue(days > 0, "The number of days cannot be negative");
+        Assert.isTrue(days >= 0, "The number of days cannot be negative");
         Assert.isTrue(days < 31, "The number of days cannot be greater than 31");
         this.name = name;
         this.dailyIncome = dailyIncome;
