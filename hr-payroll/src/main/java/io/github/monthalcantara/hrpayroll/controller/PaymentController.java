@@ -18,8 +18,8 @@ import java.math.BigDecimal;
 public class PaymentController {
 
     @GetMapping("/{id}/days/{days}")
-    public ResponseEntity findPayment(@PathVariable("id") Long id, @PathVariable("days") @PositiveOrZero @Max(31) Integer days) {
-        System.out.println(id + days);
+    public ResponseEntity findPayment(@PathVariable("id") Long id,
+                                      @PathVariable("days") @PositiveOrZero @Max(31) Integer days) {
         return ResponseEntity.ok(new Payment("Bob", BigDecimal.valueOf(300.00), days));
     }
 
