@@ -25,6 +25,10 @@ public class PaymentController {
     @Autowired
     private RestTemplate restTemplate;
 
+    /*
+    * hr-worker.host foi a variável criada no applicattion.properties informando a url base da aplicação a qual será feita a requisição
+    * com @Value, o valor da variável é colocada em workerHost
+    * */
     @Value("${hr-worker.host}")
     private String workerHost;
 
@@ -33,9 +37,14 @@ public class PaymentController {
                                       @PathVariable("days") @PositiveOrZero @Max(31) Integer days) {
         Map<String, String> uriVariables = new HashMap<>();
         uriVariables.put("id", id.toString());
+        /*
+        *Como será feito um Get, foi usado o método getForObject passando a url base declarada no application properties
+        * concatenado com o restante da url mais o id. O id poderia ter sido concatenado com + id (aproveitando o próprio id passado no path
+        * porém foi usada outra abordagem onde foi utilizado um mapa para fazer a interpolação com o {id} da url, sen necessario passar no
+        * getForObject, no ultimo parametro, de onde seria tirado os dados para a interpolaçãoa. caso fosse feito da outra forma
+        * apenas a url e o tipo da Classe esperada na resposta seria informado.
+        * */
         WorkerResponse response = restTemplate.getForObject(workerHost + "/workers/{id}", WorkerResponse.class, uriVariables);
         return ResponseEntity.ok(new Payment(response.getName(), response.getDailyIncome(), days));
     }
-
-    //teste commit merge
 }
