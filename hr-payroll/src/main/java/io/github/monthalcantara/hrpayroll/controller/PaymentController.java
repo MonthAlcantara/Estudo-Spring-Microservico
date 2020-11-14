@@ -37,5 +37,6 @@ public class PaymentController {
         //1
         WorkerResponse response = restTemplate.getForObject(workerHost + "/workers/{id}", WorkerResponse.class, uriVariables);
         return ResponseEntity.ok(new Payment(response.getName(), response.getDailyIncome(), days));
+        //Gerando teste
     }
 }
