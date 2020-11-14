@@ -1,42 +1,40 @@
 package io.github.monthalcantara.hrpayroll.controller;
 
+import io.github.monthalcantara.hrpayroll.feignclients.WorkerFeignClient;
 import io.github.monthalcantara.hrpayroll.model.Payment;
 import io.github.monthalcantara.hrpayroll.model.WorkerResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.PositiveOrZero;
-import java.util.HashMap;
-import java.util.Map;
 
-//1
+//3
 @Validated
 @RestController
 @RequestMapping("/payments")
 public class PaymentController {
 
+    //1
     @Autowired
-    private RestTemplate restTemplate;
+    private WorkerFeignClient feignClient;
 
-    @Value("${hr-worker.host}")
-    private String workerHost;
-
+    //1
     @GetMapping("/{id}/days/{days}")
-    public ResponseEntity findPayment(@PathVariable("id") Long id,
-                                      @PathVariable("days") @PositiveOrZero @Max(31) Integer days) {
-        Map<String, String> uriVariables = new HashMap<>();
-        uriVariables.put("id", id.toString());
+    public ResponseEntity<Payment> findPayment(@PathVariable("id") Long id,
+                                               @PathVariable("days") @PositiveOrZero @Max(31) Integer days) {
+        /*
+         *  O findById retorna um ResponseEntity<WorkerResponse>. O corpo do ResponseEntity contém o Objeto WorkerResponse
+         * Dessa forma para pegar o objeto e atribuir a variável response, utilizei o getBody
+         * */
         //1
-        WorkerResponse response = restTemplate.getForObject(workerHost + "/workers/{id}", WorkerResponse.class, uriVariables);
-        return ResponseEntity.ok(new Payment(response.getName(), response.getDailyIncome(), days));
-        //Gerando teste
+        WorkerResponse response = feignClient.findById(id).getBody();
+        return new ResponseEntity<Payment>(new Payment(response.getName(), response.getDailyIncome(), days), HttpStatus.OK);
     }
 }
