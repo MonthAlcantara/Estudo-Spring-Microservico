@@ -32,7 +32,7 @@ public class PaymentController {
     public ResponseEntity findPayment(@PathVariable("id") Long id,
                                       @PathVariable("days") @PositiveOrZero @Max(31) Integer days) {
         Map<String, String> uriVariables = new HashMap<>();
-        uriVariables.put("id", "" + id);
+        uriVariables.put("id", id.toString());
         WorkerResponse response = restTemplate.getForObject(workerHost + "/workers/{id}", WorkerResponse.class, uriVariables);
         return ResponseEntity.ok(new Payment(response.getName(), response.getDailyIncome(), days));
     }
