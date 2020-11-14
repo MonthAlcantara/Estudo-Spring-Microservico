@@ -36,4 +36,6 @@ public class PaymentController {
         WorkerResponse response = restTemplate.getForObject(workerHost + "/workers/{id}", WorkerResponse.class, uriVariables);
         return ResponseEntity.ok(new Payment(response.getName(), response.getDailyIncome(), days));
     }
+
+    //teste commit merge
 }
