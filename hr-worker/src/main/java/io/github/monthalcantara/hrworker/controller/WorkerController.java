@@ -28,7 +28,7 @@ public class WorkerController {
     }
 
     @GetMapping
-    public ResponseEntity findAll() {
+    public ResponseEntity<List<WorkerResponse>> findAll() {
         Query query = manager.createQuery("select w from Worker w");
         //1
         List<Worker> list = query.getResultList();
@@ -38,7 +38,7 @@ public class WorkerController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity findById(@PathVariable("id") Long id) {
+    public ResponseEntity<WorkerResponse> findById(@PathVariable("id") Long id) {
         Worker worker = manager.find(Worker.class, id);
         //1
         Assert.isTrue(worker != null, "Resource not found");
