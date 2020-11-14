@@ -17,6 +17,7 @@ import javax.validation.constraints.PositiveOrZero;
 import java.util.HashMap;
 import java.util.Map;
 
+//1
 @Validated
 @RestController
 @RequestMapping("/payments")
@@ -33,6 +34,7 @@ public class PaymentController {
                                       @PathVariable("days") @PositiveOrZero @Max(31) Integer days) {
         Map<String, String> uriVariables = new HashMap<>();
         uriVariables.put("id", id.toString());
+        //1
         WorkerResponse response = restTemplate.getForObject(workerHost + "/workers/{id}", WorkerResponse.class, uriVariables);
         return ResponseEntity.ok(new Payment(response.getName(), response.getDailyIncome(), days));
     }
