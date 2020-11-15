@@ -2,6 +2,10 @@ package io.github.monthalcantara.hrworker.controller;
 
 import io.github.monthalcantara.hrworker.dto.response.WorkerResponse;
 import io.github.monthalcantara.hrworker.model.Worker;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,6 +24,11 @@ import java.util.stream.Collectors;
 @RequestMapping("/workers")
 public class WorkerController {
 
+    private static Logger logger = LoggerFactory.getLogger(WorkerController.class);
+
+    @Autowired
+    private Environment env; // classe do Spring que contém várias informações do contexto da app
+
     @PersistenceContext
     private EntityManager manager;
 
@@ -32,6 +41,8 @@ public class WorkerController {
         Query query = manager.createQuery("select w from Worker w");
         //1
         List<Worker> list = query.getResultList();
+
+        logger.info("PORT = " + env.getProperty("local.server.port")); // para descobrir a porta que estou acessando
         //2
         List<WorkerResponse> listResponse = list.stream().map(w -> w.toResponse()).collect(Collectors.toList());
         return ResponseEntity.ok(listResponse);

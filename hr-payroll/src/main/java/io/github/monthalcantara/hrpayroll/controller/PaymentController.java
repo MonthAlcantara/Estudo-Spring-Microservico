@@ -4,6 +4,7 @@ import io.github.monthalcantara.hrpayroll.feignclients.WorkerFeignClient;
 import io.github.monthalcantara.hrpayroll.model.Payment;
 import io.github.monthalcantara.hrpayroll.model.WorkerResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -20,6 +21,9 @@ import javax.validation.constraints.PositiveOrZero;
 @RestController
 @RequestMapping("/payments")
 public class PaymentController {
+
+    @Autowired
+    private Environment env;
 
     //1
     @Autowired
